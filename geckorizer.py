@@ -35,6 +35,7 @@
 import firebase_admin
 import json
 from pprint import pprint
+import pandas as pd
 from pandas.io.json import json_normalize
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -50,14 +51,19 @@ db = firestore.client()
 # retrieve the contents of a single document using get() method
 users_ref = db.collection(u'snapshot')
 # with user count limit use: docs = discover_users_ref.limit(1).get()
-query = users_ref.order_by(
-    u'snapshot',
-    direction=firestore.Query.DESCENDING).limit(3)
-results = query.get()
+docs = users_ref.order_by(
+    u'timestamp',
+    direction=firestore.Query.DESCENDING).limit(3).get()
 
-docs = users_ref.get()
-
-# docs = users_ref.from_dict(docs.to_dict())
-
+print(u'Document Data: {}'.format(docs.to_dict()))
+# json_data = json.load(docs, encoding='UTF-8')
+# pprint(json_data)
+# json_df = pd.read_json(docs, orient='columns')
+# print(json_df.head(10))
+# print(json_df.head())
+'''f = open("text.txt", "w")
 for doc in docs:
-    print(u'{} => {}'.format(doc.id, doc.to_dict()), "\n")
+    f.write(doc)
+    # print(u'{} => {}'.format(doc.id, doc.to_dict()), "\n")
+f.close()
+'''
