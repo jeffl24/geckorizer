@@ -1,40 +1,7 @@
-# # import firebase_admin
-# # from firebase_admin import credentials
-# # from firebase_admin import db
-# #
-# # # Fetch the service account key JSON file contents
-# # cred = credentials.Certificate('.\geckorizer.json')
-# #
-# # # Initialize the app with a service account, granting admin privileges
-# # firebase_admin.initialize_app(cred, {
-# #     'geckorizer': 'https://geckorizer.firebaseio.com'
-# # })
-# #
-# # # db.collection(u'snapshot').order_by(u'timestamp').limit(1).get()
-# #
-# # ss = db.collection(u'snapshot')
-# # query = ss.limit(3)
-# # results = query.get()
-# #
-# # print(db)
-# from google.cloud import firestore
-#
-# # Add a new document
-# db = firestore.Client.from_service_account_json('geckorizer.json')
-# doc_ref = db.collection(u'snapshot')
-#
-# print(doc_ref.to_dict())
-#
-# # # Then query for documents
-# # users_ref = db.collection(u'users')
-# # docs = users_ref.get()
-# #
-# # for doc in docs:
-# #     print(u'{} => {}'.format(doc.id, doc.to_dict()))
-
 import firebase_admin
 import json
 from pprint import pprint
+import pandas as pd
 from pandas.io.json import json_normalize
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -50,14 +17,34 @@ db = firestore.client()
 # retrieve the contents of a single document using get() method
 users_ref = db.collection(u'snapshot')
 # with user count limit use: docs = discover_users_ref.limit(1).get()
-query = users_ref.order_by(
-    u'snapshot',
-    direction=firestore.Query.DESCENDING).limit(3)
-results = query.get()
+docs = users_ref.order_by(
+    u'timestamp',
+    direction=firestore.Query.DESCENDING).limit(1).get()
 
-docs = users_ref.get()
-
-# docs = users_ref.from_dict(docs.to_dict())
+json_dict = dict()
+# for doc in docs:
+#     preview1 = pd.io.json.json_normalize(doc.to_dict()['stock'],
+#         record_path=['location'])
+#     # u'{}': '{}'.format(doc.id, doc.to_dict()))
+#     preview2 = pd.io.json.json_normalize(doc.to_dict()['timestamp'])
+#     print(preview2)
 
 for doc in docs:
-    print(u'{} => {}'.format(doc.id, doc.to_dict()), "\n")
+    print(u'{}, {}'.format(doc.id, doc.to_dict()))
+# json_df = pd.io.json.json_normalize(json_dict)
+# print(json_df)
+    # data = json.loads(doc.to_dict())
+    # data_new = json_normalize(data['stock'])
+
+# json_df = []
+# for entry in json_list:
+#     json_df = json.loads(entry)
+
+# pew = json.loads(json_list[0])
+# print(pew)
+
+# with open('data.json', 'w') as fp:
+#     for doc in docs:
+#         entry = json.dump(doc.to_dict(), fp)
+#         json_list.append(entry)
+# print(json_list)
