@@ -19,6 +19,7 @@ users_ref = db.collection(u'snapshot')
 # with user count limit use: docs = discover_users_ref.limit(1).get()
 docs = users_ref.order_by(
     u'timestamp',
+<<<<<<< HEAD
     direction=firestore.Query.DESCENDING).limit(1).get()
 
 json_dict = dict()
@@ -28,8 +29,19 @@ json_dict = dict()
 #     # u'{}': '{}'.format(doc.id, doc.to_dict()))
 #     preview2 = pd.io.json.json_normalize(doc.to_dict()['timestamp'])
 #     print(preview2)
+=======
+    direction=firestore.Query.DESCENDING).limit(3).get()
+>>>>>>> origin/master
 
+print(u'Document Data: {}'.format(docs.to_dict()))
+# json_data = json.load(docs, encoding='UTF-8')
+# pprint(json_data)
+# json_df = pd.read_json(docs, orient='columns')
+# print(json_df.head(10))
+# print(json_df.head())
+'''f = open("text.txt", "w")
 for doc in docs:
+<<<<<<< HEAD
     print(u'{}, {}'.format(doc.id, doc.to_dict()))
 # json_df = pd.io.json.json_normalize(json_dict)
 # print(json_df)
@@ -48,3 +60,9 @@ for doc in docs:
 #         entry = json.dump(doc.to_dict(), fp)
 #         json_list.append(entry)
 # print(json_list)
+=======
+    f.write(doc)
+    # print(u'{} => {}'.format(doc.id, doc.to_dict()), "\n")
+f.close()
+'''
+>>>>>>> origin/master
