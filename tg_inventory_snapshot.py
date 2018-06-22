@@ -12,9 +12,6 @@ import math
 import datetime
 pd.options.display.max_columns = 999
 
-
-# In[2]:
-
 url = 'https://api.tradegecko.com/variants'
 bearer = {'Authorization': 'Bearer f4855aebc4a92c0d6a09f07b105bcbae81afbaf8cb1344f47a5b5c45cf8f4c1e'}
 
@@ -36,8 +33,8 @@ for loop in range(loop_count):
     variants_json = json.loads(variants_request)
     variants_df = pd.io.json.json_normalize(variants_json, record_path='variants')
     variants_df_all = variants_df_all.append(variants_df)
-    
-# split the dict columns into individual columns, 
+
+# split the dict columns into individual columns,
 # and then apply pd.concat to create a full dataframe
 committed_stock_level_cols = variants_df_all['committed_stock_levels'].apply(pd.Series).rename({81481: "HQ Committed",
                                                                                             87144: "WH Committed",
@@ -66,7 +63,6 @@ df_locations['location_id'] = df_locations['location_id'].map({81481: "HQ",
 
 
 df_final = pd.merge(df_locations, df_others, on='sku').drop(['buy_price','committed_stock','stock_on_hand_y','incoming_stock','committed_stock_levels', 'locations', 'prices', 'stock_levels', 'variant_prices'], axis = 1)
-
+df_final['snapshot_datetime'] = datetime.datetime.now()
 # export file to csv
-df_final.to_csv('inventory_api_{}.csv'.format(str(datetime.datetime.now()).replace(':', '-')))
-
+df_final.to_csv('C:/Users/limzi/OneDrive/Forecasting & Reporting/Jeff Files/PowerBi Files/Inventory API/inventory_api_{}.csv'.format(str(datetime.date.today())))
